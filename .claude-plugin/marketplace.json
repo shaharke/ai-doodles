@@ -1,17 +1,19 @@
 {
   "name": "ai-doodles",
   "description": "Personal AI plugins marketplace for Claude Code",
-  "author": "shaharke",
-  "repository": "shaharke/ai-doodles",
+  "owner": {
+    "name": "Shahar Kedar",
+    "email": "shahar@gmail.com"
+  },
   "plugins": [
     {
       "name": "gitops",
-      "path": "plugins/gitops",
+      "source": "./plugins/gitops",
       "description": "Git workflow automation — conventional commits, smart staging, and more"
     },
     {
       "name": "aiops",
-      "path": "plugins/aiops",
+      "source": "./plugins/aiops",
       "description": "AI hygiene tools — clean up slop, enforce quality, and keep AI-generated code human-grade"
     }
   ]
