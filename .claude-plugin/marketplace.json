@@ -1,0 +1,13 @@
+{
+  "name": "ai-doodles",
+  "description": "Personal AI plugins marketplace for Claude Code",
+  "author": "shaharke",
+  "repository": "shaharke/ai-doodles",
+  "plugins": [
+    {
+      "name": "gitops",
+      "path": "plugins/gitops",
+      "description": "Git workflow automation — conventional commits, smart staging, and more"
+    }
+  ]
+}
