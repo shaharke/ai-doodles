@@ -1,12 +1,9 @@
 {
   "name": "gitops",
-  "description": "Git workflow automation — conventional commits, smart staging, and more",
   "version": "0.1.0",
-  "skills": [
-    {
-      "name": "commit",
-      "path": "skills/commit/SKILL.md",
-      "description": "Stages all changes and creates a commit with a conventional commit message"
-    }
-  ]
+  "description": "Git workflow automation — conventional commits, smart staging, and more",
+  "author": {
+    "name": "Shahar Kedar",
+    "email": "shahar@gmail.com"
+  }
 }
