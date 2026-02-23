@@ -8,6 +8,11 @@
       "name": "gitops",
       "path": "plugins/gitops",
       "description": "Git workflow automation — conventional commits, smart staging, and more"
+    },
+    {
+      "name": "aiops",
+      "path": "plugins/aiops",
+      "description": "AI hygiene tools — clean up slop, enforce quality, and keep AI-generated code human-grade"
     }
   ]
 }

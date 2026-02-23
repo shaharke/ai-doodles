@@ -19,6 +19,7 @@ Then install any plugin:
 | Plugin | Description |
 |--------|-------------|
 | [gitops](plugins/gitops) | Git workflow automation — conventional commits, smart staging, and more |
+| [aiops](plugins/aiops) | AI hygiene tools — clean up slop, enforce quality, and keep AI-generated code human-grade |
 
 ## Adding a Plugin
 

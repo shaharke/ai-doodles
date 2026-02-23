@@ -1,0 +1,12 @@
+{
+  "name": "aiops",
+  "description": "AI hygiene tools — clean up slop, enforce quality, and keep AI-generated code human-grade",
+  "version": "0.1.0",
+  "skills": [
+    {
+      "name": "deslop",
+      "path": "skills/deslop/SKILL.md",
+      "description": "Remove AI-generated code slop from the current branch"
+    }
+  ]
+}
