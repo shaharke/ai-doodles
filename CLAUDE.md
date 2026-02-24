@@ -42,6 +42,10 @@ The `description` field is how Claude decides when to auto-invoke the skill — 
 - Skill names: lowercase, hyphenated (e.g., `commit`, `pre-push-check`)
 - Keep names short and descriptive
 
+## Versioning
+
+When updating a plugin (adding/removing/modifying skills, changing plugin metadata, etc.), always bump the `version` field in the plugin's `plugin.json`. Use semver: patch for fixes, minor for new skills or features, major for breaking changes.
+
 ## Git Commits
 
 Always use the `/commit` skill when committing changes.
