@@ -27,6 +27,7 @@ ALWAYS use a `github` MCP server if it's available. If no GitHub MCP is availabl
 >     pullRequest(number: {number}) {
 >       reviewThreads(first: 100) {
 >         nodes {
+>           id
 >           isResolved
 >           isOutdated
 >           path
@@ -35,6 +36,7 @@ ALWAYS use a `github` MCP server if it's available. If no GitHub MCP is availabl
 >           startLine
 >           comments(first: 50) {
 >             nodes {
+>               databaseId
 >               body
 >               author { login }
 >               createdAt
@@ -55,6 +57,8 @@ From either strategy, collect for each unresolved thread:
 - `startLine` (if the comment spans a range)
 - All comment bodies and authors (the full conversation)
 - Whether the thread is outdated
+- `threadNodeId` — the GraphQL node ID of the review thread (needed to resolve it in Phase 3)
+- `lastCommentId` — the REST API ID of the last comment in the thread (needed to reply to it in Phase 3)
 
 For each **unique file path** that has unresolved comments, use the `Read` tool to read approximately 30 lines of context around each commented line (15 lines above, 15 below). If the file does not exist locally, note that in the output.
 
@@ -65,12 +69,17 @@ Assemble a JSON array of thread objects, each containing:
   "line": 42,
   "startLine": 40,
   "isOutdated": false,
+  "threadNodeId": "PRT_kwDOABC123...",
+  "lastCommentId": 123456789,
   "comments": [
     { "author": "reviewer", "body": "This should handle the null case" }
   ],
   "fileContext": "...surrounding lines of code..."
 }
 ```
+
+- `threadNodeId`: The GraphQL node ID of the review thread (needed for resolving).
+- `lastCommentId`: The REST API ID of the last comment in the thread (needed for replying).
 
 If there are **zero** unresolved threads, print "No unresolved review comments found — nothing to do." and stop.
 
@@ -120,7 +129,23 @@ Each subagent receives one thread object and these instructions:
 
 4. Apply the approved fixes using the `Edit` tool.
 
-5. After applying, suggest the user run `/commit` to commit the changes.
+5. For each thread, reply on the PR and resolve as appropriate:
+
+   - **Applied fix**: Reply to the review thread with a brief description of the fix that was applied (e.g., "Fixed — added null check as suggested."). Do **not** resolve the thread — let the reviewer verify.
+   - **Skipped comment**: Reply to the review thread explaining why it was skipped (e.g., "Skipping — this is outdated and no longer applies to the current code."), then resolve the thread.
+
+   To reply to a thread, use `gh api` to POST to `/repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies` with `{ "body": "..." }`, where `comment_id` is the ID of the last comment in the thread.
+
+   To resolve a thread, use `gh api graphql` with the `resolveReviewThread` mutation:
+   ```graphql
+   mutation {
+     resolveReviewThread(input: { threadId: "{thread_node_id}" }) {
+       thread { isResolved }
+     }
+   }
+   ```
+
+6. After applying, suggest the user run `/commit` to commit the changes.
 
 ## Error handling
 
