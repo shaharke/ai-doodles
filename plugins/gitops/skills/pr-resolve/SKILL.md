@@ -1,15 +1,15 @@
 ---
-name: pr-comments
-description: 'Fetch unresolved PR review comments and suggest code fixes. Use when asked to address PR feedback, handle review comments, or fix PR discussions.'
+name: pr-resolve
+description: 'Resolve unresolved PR review comments by suggesting and applying code fixes. Use when asked to address PR feedback, handle review comments, or fix PR discussions.'
 ---
 
 Fetch all unresolved review comments on a pull request, analyze each one, and suggest concrete code fixes.
 
 ## Phase 0: Input resolution
 
-1. If `$ARGUMENTS` contains a GitHub PR URL (`https://github.com/{owner}/{repo}/pull/{number}`), parse `owner`, `repo`, and `number` from it.
-2. If no arguments were provided, run `gh pr view --json url,number` to resolve the PR from the current branch.
-3. If neither works, use `AskUserQuestion` to ask the user for the PR URL.
+1. If `$ARGUMENTS` contains a GitHub PR URL (`https://github.com/{owner}/{repo}/pull/{number}`), parse `owner`, `repo`, and `number` from it directly.
+2. Otherwise, use `AskUserQuestion` to ask the user for the PR URL. Prompt: "Which PR would you like to resolve comments for?" with a free-text input.
+3. Parse `owner`, `repo`, and `number` from the provided URL.
 
 ## Phase 1: Gather unresolved comments (Haiku subagent)
 
