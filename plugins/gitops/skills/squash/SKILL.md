@@ -38,11 +38,13 @@ Squash all commits on the current branch (relative to the base branch) into a si
 
 8. **Verify**: Run `git log --oneline -3` and `git status` to confirm the squash succeeded. Print the new single commit.
 
-9. **Handle remote**: Check if the branch has a remote tracking branch (`git rev-parse --abbrev-ref @{upstream} 2>/dev/null`). If it does, let the user know and offer to force-push with lease:
-   - Print: "This branch has been pushed to the remote. Run `git push --force-with-lease` to update it."
-   - Use `AskUserQuestion` to ask whether to push now (yes/no).
-   - If yes, run `git push --force-with-lease`.
-   - If no, remind them they'll need to force-push before opening or updating a PR.
+9. **Handle remote**: Check if the branch has a remote tracking branch (`git rev-parse --abbrev-ref @{upstream} 2>/dev/null`). If it does:
+   - **If the user's original request indicated they want to push** (e.g., "squash and push", "squash then push", "squash + push", or similar), skip the confirmation and run `git push --force-with-lease` immediately.
+   - **Otherwise**, let the user know and offer to force-push with lease:
+     - Print: "This branch has been pushed to the remote. Run `git push --force-with-lease` to update it."
+     - Use `AskUserQuestion` to ask whether to push now (yes/no).
+     - If yes, run `git push --force-with-lease`.
+     - If no, remind them they'll need to force-push before opening or updating a PR.
 
 ## Important
 
