@@ -12,9 +12,12 @@ Fetch all unresolved review comments on a pull request, analyze each one, and su
 3. If no PR was found, use `AskUserQuestion` to ask the user for the PR URL. Prompt: "Which PR would you like to resolve comments for?" with a free-text input.
 4. Parse `owner`, `repo`, and `number` from the provided URL.
 
-## Phase 1: Gather unresolved comments (Haiku subagent)
+## Phase 1: Gather unresolved comments
 
-Dispatch a **single** `Task` subagent with `model: "haiku"` and `subagent_type: "general-purpose"`. Give it the following instructions:
+### Strategy A — GitHub MCP (preferred)
+
+ALWAYS use a `github` MCP server if it's available. If no GitHub MCP is available, dispatch a **single** `Task` subagent with `model: "haiku"` and `subagent_type: "general-purpose"`. Give it the following instructions:
+
 
 > Use `gh api graphql` to fetch all review threads for the PR. Use the query below (substitute owner, repo, number):
 >
@@ -43,33 +46,33 @@ Dispatch a **single** `Task` subagent with `model: "haiku"` and `subagent_type: 
 >   }
 > }
 > ```
->
-> Filter to threads where `isResolved == false`.
->
-> For each unresolved thread, collect:
-> - `path` (file path)
-> - `line` (line number in the diff)
-> - `startLine` (if the comment spans a range)
-> - All comment bodies and authors (the full conversation)
-> - Whether the thread is outdated
->
-> For each **unique file path** that has unresolved comments, use the `Read` tool to read approximately 30 lines of context around each commented line (15 lines above, 15 below). If the file does not exist locally, note that in the output.
->
-> Return a JSON array of thread objects, each containing:
-> ```json
-> {
->   "path": "src/foo.ts",
->   "line": 42,
->   "startLine": 40,
->   "isOutdated": false,
->   "comments": [
->     { "author": "reviewer", "body": "This should handle the null case" }
->   ],
->   "fileContext": "...surrounding lines of code..."
-> }
-> ```
 
-If the subagent returns **zero** unresolved threads, print "No unresolved review comments found — nothing to do." and stop.
+### Common post-processing
+
+From either strategy, collect for each unresolved thread:
+- `path` (file path)
+- `line` (line number in the diff)
+- `startLine` (if the comment spans a range)
+- All comment bodies and authors (the full conversation)
+- Whether the thread is outdated
+
+For each **unique file path** that has unresolved comments, use the `Read` tool to read approximately 30 lines of context around each commented line (15 lines above, 15 below). If the file does not exist locally, note that in the output.
+
+Assemble a JSON array of thread objects, each containing:
+```json
+{
+  "path": "src/foo.ts",
+  "line": 42,
+  "startLine": 40,
+  "isOutdated": false,
+  "comments": [
+    { "author": "reviewer", "body": "This should handle the null case" }
+  ],
+  "fileContext": "...surrounding lines of code..."
+}
+```
+
+If there are **zero** unresolved threads, print "No unresolved review comments found — nothing to do." and stop.
 
 ## Phase 2: Analyze and suggest fixes (Opus subagents)
 
@@ -125,4 +128,5 @@ Each subagent receives one thread object and these instructions:
 - **No unresolved threads**: Print a success message and exit cleanly (Phase 1 early exit).
 - **File not found locally**: If a file referenced in a comment doesn't exist in the working tree, warn the user. Suggest checking out the PR branch with `gh pr checkout`.
 - **Branch mismatch**: If the current branch doesn't match the PR head branch, print a warning so the user knows fixes may not align with the diff.
+- **MCP tool errors**: If the `pull_request_read` MCP call fails, fall back to Strategy B (`gh` CLI).
 - **GraphQL API errors**: Print the raw error and suggest checking `gh auth status`.
