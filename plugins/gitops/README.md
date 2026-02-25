@@ -9,6 +9,7 @@ Git workflow automation plugin for Claude Code.
 | `commit` | Stages all changes and creates a conventional commit. Auto-invoked when Claude detects commit intent, or use `/commit` explicitly. |
 | `pr-resolve` | Resolves unresolved PR review comments by suggesting and applying code fixes. Use `/pr-resolve` or `/pr-resolve <PR-URL>`. |
 | `squash` | Squashes all commits on the current branch into a single conventional commit. Use `/squash` or `/squash <context>`. |
+| `fix-pr-checks` | Inspects failing CI checks on a GitHub PR, fetches failure logs, and suggests code fixes. Use `/fix-pr-checks` or `/fix-pr-checks <PR-URL>`. |
 
 ## Install
 
@@ -48,3 +49,14 @@ The **squash** skill collapses all commits on the current branch into a single c
 4. Uses `git reset --soft` + `git commit` to squash
 
 Pass arguments to hint at the commit message: `/squash auth feature`. If the branch has been pushed, it warns that a force-push will be needed.
+
+### fix-pr-checks
+
+The **fix-pr-checks** skill diagnoses and fixes failing CI checks on a pull request:
+
+1. **Discover** (Haiku) — Fetches all check statuses for the PR and filters to failures.
+2. **Select** — If multiple checks are failing, lets you pick which one to investigate (or all of them).
+3. **Fetch Logs** (Haiku) — Retrieves the failure logs and identifies which jobs/steps failed.
+4. **Analyze** (Opus) — Reads the logs, pinpoints root cause, and suggests exact code fixes with confidence ratings.
+
+After analysis, it presents the fix and lets you apply it directly. Use `/fix-pr-checks <PR-URL>` or just `/fix-pr-checks` on a branch that already tracks a PR.
