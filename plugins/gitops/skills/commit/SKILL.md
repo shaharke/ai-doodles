@@ -5,6 +5,10 @@ description: 'Stages all changes and creates a commit with a conventional commit
 
 Stage all current changes and commit them with a well-crafted message.
 
+## Execution
+
+Run this skill in the background by default using the Task tool (`run_in_background: true`, `subagent_type: "Bash"`). This lets the user continue working while the commit happens. Only run in the foreground if the user explicitly asks.
+
 ## Steps
 
 1. Run `git status` (without `-uall`) to see all changed and untracked files.
