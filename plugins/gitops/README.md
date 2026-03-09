@@ -9,8 +9,8 @@ Git workflow automation plugin for Claude Code.
 | `commit` | Stages all changes and creates a conventional commit. Auto-invoked when Claude detects commit intent, or use `/commit` explicitly. |
 | `pr-resolve` | Resolves unresolved PR review comments by suggesting and applying code fixes. Use `/pr-resolve` or `/pr-resolve <PR-URL>`. |
 | `squash` | Squashes all commits on the current branch into a single conventional commit. Use `/squash` or `/squash <context>`. |
-| `fix-pr-checks` | Inspects failing CI checks on a GitHub PR, fetches failure logs, and suggests code fixes. Use `/fix-pr-checks` or `/fix-pr-checks <PR-URL>`. |
-| `rebase-pr` | Rebases the current PR branch onto its base branch and force-pushes. Use `/rebase-pr` or `/rebase-pr <PR-URL>`. |
+| `pr-fix-checks` | Inspects failing CI checks on a GitHub PR, fetches failure logs, and suggests code fixes. Use `/pr-fix-checks` or `/pr-fix-checks <PR-URL>`. |
+| `pr-rebase` | Rebases the current PR branch onto its base branch and force-pushes. Use `/pr-rebase` or `/pr-rebase <PR-URL>`. |
 
 ## Install
 
@@ -51,20 +51,20 @@ The **squash** skill collapses all commits on the current branch into a single c
 
 Pass arguments to hint at the commit message: `/squash auth feature`. If the branch has been pushed, it warns that a force-push will be needed.
 
-### fix-pr-checks
+### pr-fix-checks
 
-The **fix-pr-checks** skill diagnoses and fixes failing CI checks on a pull request:
+The **pr-fix-checks** skill diagnoses and fixes failing CI checks on a pull request:
 
 1. **Discover** (Haiku) — Fetches all check statuses for the PR and filters to failures.
 2. **Select** — If multiple checks are failing, lets you pick which one to investigate (or all of them).
 3. **Fetch Logs** (Haiku) — Retrieves the failure logs and identifies which jobs/steps failed.
 4. **Analyze** (Opus) — Reads the logs, pinpoints root cause, and suggests exact code fixes with confidence ratings.
 
-After analysis, it presents the fix and lets you apply it directly. Use `/fix-pr-checks <PR-URL>` or just `/fix-pr-checks` on a branch that already tracks a PR.
+After analysis, it presents the fix and lets you apply it directly. Use `/pr-fix-checks <PR-URL>` or just `/pr-fix-checks` on a branch that already tracks a PR.
 
-### rebase-pr
+### pr-rebase
 
-The **rebase-pr** skill rebases a PR branch onto the latest base branch:
+The **pr-rebase** skill rebases a PR branch onto the latest base branch:
 
 1. Resolves the PR from a URL argument or the current branch
 2. Fetches the latest base branch from the remote
@@ -72,4 +72,4 @@ The **rebase-pr** skill rebases a PR branch onto the latest base branch:
 4. If conflicts arise, shows the conflicting files and asks how to proceed
 5. If successful, force-pushes with `--force-with-lease`
 
-Use `/rebase-pr <PR-URL>` or just `/rebase-pr` on a branch that already tracks a PR.
+Use `/pr-rebase <PR-URL>` or just `/pr-rebase` on a branch that already tracks a PR.

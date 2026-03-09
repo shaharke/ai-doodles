@@ -1,5 +1,5 @@
 ---
-name: fix-pr-checks
+name: pr-fix-checks
 description: 'Inspect failing CI checks on a GitHub PR, fetch logs, and suggest fixes. Use when asked to fix checks, investigate CI failures, debug pipeline errors, or resolve failing builds.'
 ---
 

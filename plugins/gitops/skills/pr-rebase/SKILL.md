@@ -1,5 +1,5 @@
 ---
-name: rebase-pr
+name: pr-rebase
 description: 'Rebase the current PR branch onto its base branch to bring it up to date. Use when asked to rebase a PR, update a branch, or sync with main.'
 ---
 
