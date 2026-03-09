@@ -10,6 +10,7 @@ Git workflow automation plugin for Claude Code.
 | `pr-resolve` | Resolves unresolved PR review comments by suggesting and applying code fixes. Use `/pr-resolve` or `/pr-resolve <PR-URL>`. |
 | `squash` | Squashes all commits on the current branch into a single conventional commit. Use `/squash` or `/squash <context>`. |
 | `fix-pr-checks` | Inspects failing CI checks on a GitHub PR, fetches failure logs, and suggests code fixes. Use `/fix-pr-checks` or `/fix-pr-checks <PR-URL>`. |
+| `rebase-pr` | Rebases the current PR branch onto its base branch and force-pushes. Use `/rebase-pr` or `/rebase-pr <PR-URL>`. |
 
 ## Install
 
@@ -60,3 +61,15 @@ The **fix-pr-checks** skill diagnoses and fixes failing CI checks on a pull requ
 4. **Analyze** (Opus) — Reads the logs, pinpoints root cause, and suggests exact code fixes with confidence ratings.
 
 After analysis, it presents the fix and lets you apply it directly. Use `/fix-pr-checks <PR-URL>` or just `/fix-pr-checks` on a branch that already tracks a PR.
+
+### rebase-pr
+
+The **rebase-pr** skill rebases a PR branch onto the latest base branch:
+
+1. Resolves the PR from a URL argument or the current branch
+2. Fetches the latest base branch from the remote
+3. Runs `git rebase origin/<base-branch>`
+4. If conflicts arise, shows the conflicting files and asks how to proceed
+5. If successful, force-pushes with `--force-with-lease`
+
+Use `/rebase-pr <PR-URL>` or just `/rebase-pr` on a branch that already tracks a PR.
