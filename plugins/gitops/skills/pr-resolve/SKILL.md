@@ -145,7 +145,9 @@ Each subagent receives one thread object and these instructions:
    }
    ```
 
-6. After applying, suggest the user run `/commit` to commit the changes.
+6. After applying fixes, automatically commit and push the changes:
+   - Stage and commit all applied fixes.
+   - Push the commit to the remote branch using `git push`.
 
 ## Error handling
 
