@@ -8,7 +8,7 @@ Fetch all unresolved review comments on a pull request, analyze each one, and su
 ## Phase 0: Input resolution
 
 1. If `$ARGUMENTS` contains a GitHub PR URL (`https://github.com/{owner}/{repo}/pull/{number}`), parse `owner`, `repo`, and `number` from it directly.
-2. Otherwise, try to infer the PR from the current branch by running `gh pr view --json number,url,headRepositoryOwner,baseRepository 2>/dev/null`. If this succeeds, parse `owner`, `repo`, and `number` from the returned JSON.
+2. Otherwise, try to infer the PR from the current branch by running `gh pr view --json number,url,headRepositoryOwner,baseRefName 2>/dev/null`. If this succeeds, parse `owner`, `repo`, and `number` from the returned JSON.
 3. If no PR was found, use `AskUserQuestion` to ask the user for the PR URL. Prompt: "Which PR would you like to resolve comments for?" with a free-text input.
 4. Parse `owner`, `repo`, and `number` from the provided URL.
 
