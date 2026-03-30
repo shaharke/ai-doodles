@@ -1,9 +1,0 @@
-{
-  "name": "aiops",
-  "version": "0.1.0",
-  "description": "AI hygiene tools — clean up slop, enforce quality, and keep AI-generated code human-grade",
-  "author": {
-    "name": "Shahar Kedar",
-    "email": "shahar@gmail.com"
-  }
-}
