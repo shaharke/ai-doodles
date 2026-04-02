@@ -8,6 +8,7 @@ Git workflow automation plugin for Claude Code.
 |-------|-------------|
 | `squash` | Squashes all commits on the current branch into a single conventional commit. Use `/squash` or `/squash <context>`. |
 | `pr-rebase` | Rebases the current PR branch onto its base branch and force-pushes. Use `/pr-rebase` or `/pr-rebase <PR-URL>`. |
+| `pr-align` | Aligns a PR's title and description to match the commits on the branch. Use `/pr-align` or `/pr-align <PR-URL>`. |
 | `pr-fix-yolo` | Continuously fixes PR review comments and failing CI checks in a loop until everything is green. Use `/pr-fix-yolo`. |
 
 ## Install
@@ -16,6 +17,19 @@ Git workflow automation plugin for Claude Code.
 /plugin marketplace add shaharke/ai-doodles
 /plugin install gitops
 ```
+
+### pr-align
+
+The **pr-align** skill updates a PR's title and description to reflect the actual commits on the branch:
+
+1. Reads all commits and the diff since the branch diverged from the base
+2. Composes a conventional commit title and a structured description (Summary / Approach / Changes)
+3. Shows a preview of the proposed title and description
+4. Asks for confirmation before updating the PR
+
+The description focuses on **why** the change was made and key technical decisions, not just what files were touched.
+
+Use `/pr-align <PR-URL>` or just `/pr-align` on a branch that already tracks a PR.
 
 ### squash
 
